@@ -1,70 +1,87 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Web Portfolio - Rabiya Salehjee
 
-## Available Scripts
+This is my personal web portfolio, showcasing my skills, projects, and contact information. The website is built using **React**, **Tailwind CSS**, and **Particles.js** for the particle background effects. It features smooth scrolling and a custom cursor for enhanced user interaction.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Custom Cursor**: Unique cursor design with smooth transitions.
+- **Particles Background**: Dynamic particle effects in the background using the `react-tsparticles` library.
+- **Smooth Scrolling**: Sections smoothly scroll into view with visual transitions.
+- **Responsive Design**: Fully responsive across various devices, including iPhones.
+- **Skills Section**: Display of my technical skills with a custom progress bar for each skill.
+- **Projects Section**: A list of my featured projects with links to their GitHub repositories.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Sections
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **Home**: 
+   - Introduction with my name and a brief description.
+   - Social media links for **LinkedIn**, **GitHub**, **X (formerly Twitter)**, and email contact.
+   - Scroll indicator for navigating to the next section.
 
-### `npm test`
+2. **Skills**:
+   - A detailed overview of my technical skills including React, Java, Python, JavaScript, and more.
+   - Progress bars indicating my proficiency in each skill.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. **Projects**:
+   - A showcase of my featured projects including:
+     - **HALO**: A human-and-LLM-in-the-loop data cleaning system.
+     - **Fluencio**: A public speaking enhancement app and its website.
+   - Each project is accompanied by a link to view more on GitHub.
 
-### `npm run build`
+## Getting Started
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Before you begin, ensure you have the following installed on your local machine:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **[Node.js](https://nodejs.org/)**: JavaScript runtime for building and running your application.
+- **[npm](https://www.npmjs.com/)**: Node package manager, which comes with Node.js.
 
-### `npm run eject`
+### Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. **Clone the Repository**: Clone this repository to your local machine by running the following command in your terminal:
+   ```bash
+   git clone https://github.com/yourusername/web-portfolio.git
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. **Navigate to the Project Directory**: Move into the project directory:
+   ```bash
+   cd web-portfolio
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3. **Install Dependencies**: Install the necessary dependencies using npm:
+   ```bash
+   npm install
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Running the Project Locally
 
-## Learn More
+Once the dependencies are installed, you can run the project locally using the following command:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This will start the development server, and you can view the web portfolio by navigating to [http://localhost:3000/](http://localhost:3000/) in your browser.
 
-### Code Splitting
+### Building for Production
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+To build an optimized version of your web portfolio for production, run:
 
-### Analyzing the Bundle Size
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+This will generate a `build/` directory containing the optimized production files, which can be deployed to hosting services such as **Vercel**, **Netlify**, or any other static site hosting provider.
 
-### Making a Progressive Web App
+## Technologies Used
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- **React**: JavaScript library for building user interfaces.
+- **Tailwind CSS**: Utility-first CSS framework for styling.
+- **react-tsparticles**: Library for creating particle effects in the background.
+- **FontAwesome**: Icon library used for social media links.
 
-### Advanced Configuration
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is open source and available under the [MIT License](https://opensource.org/licenses/MIT).
