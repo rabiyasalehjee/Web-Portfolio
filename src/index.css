@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Custom Cursor */
+  .custom-cursor {
+    position: fixed;
+    width: 30px; /* Reduced size */
+    height: 30px; /* Reduced size */
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease-out;
+    z-index: 9999;
+    mix-blend-mode: difference;
+  }
+
+  .custom-cursor-dot {
+    position: fixed;
+    width: 5px; /* Reduced size */
+    height: 5px; /* Reduced size */
+    border-radius: 50%;
+    background-color: white;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s ease-out;
+    z-index: 9999;
+  }
+
+  /* Scroll Indicator (Mouse-style) */
+  .mouse-indicator {
+    width: 35px;
+    height: 55px;
+    border: 2px solid white;
+    border-radius: 50px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1s ease-out;
+  }
+
+  /* Animated Dot Inside the Mouse Scroll Indicator */
+  .mouse-wheel {
+    width: 8px;
+    height: 8px;
+    background-color: #e91e63; /* Pink dot */
+    border-radius: 50%;
+    animation: scroll-wheel 2s infinite;
+  }
+
+  /* Keyframes for Scroll Wheel Dot Animation */
+  @keyframes scroll-wheel {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(10px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+}
+
+/* nav bar */
+.bg-navbar {
+  background-color: #354557; /* Adjusted nav bar color to better fit with the background */
+}
+
+nav ul li {
+  list-style: none;
+  font-weight: 300; /* Lighter text */
+}
+
+nav ul li:hover {
+  color: #f1f1f1;
+}
+
+@media (max-width: 768px) {
+  nav {
+    width: 90%;
+  }
+
+  nav ul li {
+    font-size: 1rem;
+  }
+}
+
+/* Hide dots on mobile devices */
+@media (max-width: 768px) {
+  .dots-container {
+    display: none; /* Hide the dots on small screens */
+  }
+}
+
+/* Adjust mouse indicator for iPhone 14 Pro Max specifically */
+@media (max-width: 430px) and (min-height: 932px) {
+  .mouse-indicator {
+    bottom: 15px; /* Move the mouse indicator further down */
+  }
+}
