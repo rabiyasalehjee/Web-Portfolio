@@ -53,30 +53,29 @@ const Section2 = () => {
 
   const screenHeight = window.innerHeight;
   const translateValue = Math.min((scrollY - screenHeight) / 5, 100);
-  const opacityValue = Math.max(1 - (scrollY - screenHeight) / 400, 0);
-  
+
+  // Adjust opacity logic to maintain a minimum opacity of 1 when the scroll finishes
+  const opacityValue = scrollY >= screenHeight ? 1 : Math.max(1 - (scrollY - screenHeight) / 400, 0.9);
 
   return (
-    <div className="w-full min-h-screen flex flex-col justify-center items-center relative overflow-hidden"
+    <div
+      className="w-full min-h-screen flex flex-col justify-center items-center relative overflow-hidden"
       style={{
         margin: 0,
         padding: 0,
         backgroundColor: "#111827",
-        fontFamily: "Fira Code, monospace", // Apply tech/coding font family here
+        fontFamily: "Fira Code, monospace",
       }}
     >
-      {/* Use SharedParticles with unique ID */}
       <SharedParticles id="particles-section2" />
 
-      {/* Content for About Me and Skills */}
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between h-auto lg:h-full px-4 lg:px-10 py-10">
-        {/* Left side: Introduction */}
         <div
           className="lg:w-1/2 p-4 md:p-6 text-white flex flex-col justify-center items-start"
           style={{
             transform: `translateY(${translateValue}px)`,
             transition: "transform 0.5s ease-out, opacity 0.5s ease-out",
-            opacity: opacityValue,
+            opacity: opacityValue, // Set the adjusted opacity here
             fontFamily: "Fira Code, monospace",
             letterSpacing: "0.03em",
             textAlign: "justify",
@@ -85,20 +84,17 @@ const Section2 = () => {
           <h2 className="text-xl sm:text-3xl md:text-5xl font-extrabold mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-pink-400 to-pink-300">
             About Me
           </h2>
-          <p className="text-sm sm:text-base md:text-xl leading-[1.2] max-w-lg opacity-90 hover:opacity-100 transition-opacity duration-300">
-            I’m a passionate software developer with a deep love for full-stack development, data analysis, and large language models. My work is focused on delivering exceptional solutions that blend creativity with technical expertise. Whether it's front-end magic or back-end robustness, I thrive in bringing ideas to life with clean, scalable code
-            <sup>&#x24C0;</sup>.
+          <p className="text-sm sm:text-base md:text-xl leading-[1.2] max-w-lg hover:opacity-100 transition-opacity duration-300">
+            I’m a passionate software developer with a deep love for full-stack development, data analysis, and large language models. My work is focused on delivering exceptional solutions that blend creativity with technical expertise. Whether it's front-end magic or back-end robustness, I thrive in bringing ideas to life with clean, scalable code.
           </p>
-
         </div>
 
-        {/* Right side: Professional Skills Section */}
         <div
-          className="lg:w-1/2 p-4 md:p-6 flex flex-col justify-center items-start mt-6 lg:mt-0" // Adjusted for small screen spacing
+          className="lg:w-1/2 p-4 md:p-6 flex flex-col justify-center items-start mt-6 lg:mt-0"
           style={{
             transform: `translateY(${translateValue}px)`,
             transition: "transform 0.5s ease-out, opacity 0.5s ease-out",
-            opacity: opacityValue,
+            opacity: opacityValue, // Adjusted opacity
             fontFamily: "Fira Code, monospace",
             letterSpacing: "0.03em",
           }}
@@ -107,7 +103,6 @@ const Section2 = () => {
             Skills
           </h2>
 
-          {/* Skills List with Flexbox */}
           <div className="flex flex-col lg:flex-row w-full justify-between">
             <div className="w-full lg:w-1/2 pr-0 lg:pr-4 mb-4 lg:mb-0">
               {skills.slice(0, 3).map(({ name, level }, index) => (
@@ -125,5 +120,6 @@ const Section2 = () => {
     </div>
   );
 };
+
 
 export default Section2;

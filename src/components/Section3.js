@@ -49,13 +49,20 @@ const Section3 = () => {
   const translateValue = Math.min((scrollY - screenHeight * 2) / 5, 100);
   const opacityValue = Math.max(1 - (scrollY - screenHeight * 2) / 400, 0);
 
+  // Check if the user is at the last section
+  const isLastSection = scrollY >= screenHeight * 2;
+
   return (
     <div className="w-full min-h-screen flex flex-col justify-center items-center relative overflow-hidden" style={{ margin: 0, padding: 0, backgroundColor: "#111827", fontFamily: "Fira Code, monospace" }}>
       {/* Use SharedParticles with unique ID */}
       <SharedParticles id="particles-section3" />
 
       {/* Content for My Projects */}
-      <div className="relative z-10 flex flex-col items-center justify-center lg:justify-between h-auto lg:h-full px-4 sm:px-6 lg:px-10 py-6 sm:py-10 mt-12" style={{ transform: `translateY(${translateValue}px)`, transition: "transform 0.5s ease-out, opacity 0.5s ease-out", opacity: opacityValue }}>
+      <div className="relative z-10 flex flex-col items-center justify-center lg:justify-between h-auto lg:h-full px-4 sm:px-6 lg:px-10 py-6 sm:py-10 mt-12" style={{ 
+        transform: isLastSection ? 'none' : `translateY(${translateValue}px)`, 
+        transition: isLastSection ? 'none' : "transform 0.5s ease-out, opacity 0.5s ease-out", 
+        opacity: isLastSection ? 1 : opacityValue 
+      }}>
         <h2 className="text-lg sm:text-2xl md:text-5xl font-extrabold mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-pink-400 to-pink-300">
           My Projects
         </h2>
