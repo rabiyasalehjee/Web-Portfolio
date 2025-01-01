@@ -85,7 +85,7 @@ const Section2 = () => {
             About Me
           </h2>
           <p className="text-sm sm:text-base md:text-xl leading-[1.2] max-w-lg hover:opacity-100 transition-opacity duration-300">
-            I’m a passionate software developer with a deep love for full-stack development, data analysis, and large language models. My work is focused on delivering exceptional solutions that blend creativity with technical expertise. Whether it's front-end magic or back-end robustness, I thrive in bringing ideas to life with clean, scalable code.
+            I’m a passionate software engineer with a deep love for full-stack development, data analysis, and large language models. My work is focused on delivering exceptional solutions that blend creativity with technical expertise. Whether it's front-end magic or back-end robustness, I thrive in bringing ideas to life with clean, scalable code.
           </p>
         </div>
 

@@ -161,7 +161,17 @@ const resetTouchStates = () => {
           
           const handleClick = (sectionNumber) => {
             clearTimeout(debounceTimeoutRef.current);
-      
+            
+            if (sectionNumber === 4) {
+              console.log("Resume clicked");
+              // Trigger the download
+              const resumeLink = document.createElement('a');
+              resumeLink.href = '/RabiyaSalehjeeCV.pdf'; // Path to the resume file
+              resumeLink.download = 'RabiyaSalehjeeCV.pdf'; // Set download name
+              resumeLink.click();
+              return;
+            }
+
             debounceTimeoutRef.current = setTimeout(() => {
               const sectionRef = sections[sectionNumber - 1].current;
               const offsetTop = sectionRef.offsetTop;
@@ -294,11 +304,12 @@ const toggleMenu = (event) => {
                       style={{ transform: `translateY(60px)` }} 
                       onClick={() => {
                         console.log('Resume clicked');
+                        handleClick(4);
                         // Initiate resume download
-                        const resumeLink = document.createElement('a');
-                        resumeLink.href = '/path/to/your/resume.pdf'; // Replace with actual resume path
-                        resumeLink.download = 'resume.pdf';
-                        resumeLink.click();
+                        //const resumeLink = document.createElement('a');
+                        //resumeLink.href = '/RabiyaSalehjeeCV.pdf'; // Replace with actual resume path
+                        //resumeLink.download = 'RabiyaSalehjeeCV.pdf';
+                        //resumeLink.click();
                         toggleMenu();    // Close mobile menu after download
                       }}
                       className="hover:text-gray-300"

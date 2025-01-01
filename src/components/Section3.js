@@ -88,7 +88,7 @@ const Section3 = () => {
             title="Fluencio - Website"
             description="A website providing tools for public speaking improvement with real-time feedback and user-friendly interface"
             cooperationText="View More"
-            link="https://github.com/rabiyasalehjee"
+            link="https://fluencio-website.vercel.app/"
           />
         </div>
       </div>
