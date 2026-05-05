@@ -155,6 +155,7 @@ const SUCCESS_MESSAGE = "Message sent successfully. Thank you for reaching out."
 
 function App() {
   const [activeSection, setActiveSection] = useState("");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [formState, setFormState] = useState({
@@ -296,9 +297,18 @@ function App() {
     return () => window.clearTimeout(timeoutId);
   }, [formMessage]);
 
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
   const scrollToTop = () => {
     clearHash();
     setActiveSection("");
+    setIsMenuOpen(false);
     document.activeElement?.blur?.();
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
@@ -320,6 +330,7 @@ function App() {
 
     clearHash();
     setActiveSection(sectionId);
+    setIsMenuOpen(false);
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -369,7 +380,46 @@ function App() {
           <FaDownload aria-hidden="true" />
           Resume
         </a>
+
+        <button
+          type="button"
+          className={`hamburger-button ${isMenuOpen ? "is-open" : ""}`}
+          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((current) => !current)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </header>
+
+      <div className={`mobile-menu ${isMenuOpen ? "is-open" : ""}`} aria-hidden={!isMenuOpen}>
+        <div className="mobile-menu-inner">
+          {navItems.map(([label, href], index) => (
+            <a
+              key={label}
+              href={href}
+              className={activeSection === href.replace("#", "") ? "is-active" : undefined}
+              style={{ transitionDelay: `${index * 80}ms` }}
+              onClick={(event) => handleNavClick(event, href)}
+            >
+              {label}
+            </a>
+          ))}
+          <div className="mobile-menu-divider" />
+          <a
+            className="mobile-resume-link"
+            href="/RabiyaSalehjeeCV.pdf"
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <FaDownload aria-hidden="true" />
+            Resume
+          </a>
+        </div>
+      </div>
 
       <main id="top">
         <section className="hero-section">
