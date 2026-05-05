@@ -1,361 +1,711 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";  
-import Design from "./components/Design";  
-import Section2 from "./components/Section2";  
-import Section3 from "./components/Section3";  
-import { FaArrowDown, FaBars, FaTimes } from "react-icons/fa";  
-import './index.css';  
-import CustomCursor from './components/CustomCursor'; // Import the custom cursor
+import { useEffect, useState } from "react";
+import {
+  FaArrowRight,
+  FaArrowUp,
+  FaDownload,
+  FaEnvelope,
+  FaGithub,
+  FaLinkedin,
+  FaPhoneAlt,
+  FaRobot,
+} from "react-icons/fa";
+import SharedParticles from "./components/SharedParticles";
+import "./App.css";
 
-const Navbar = ({ activeSection, handleClick }) => {
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 hidden md:flex justify-center items-center h-14 bg-navbar rounded-full mt-2 mx-auto w-2/3 max-w-screen-lg text-white font-fira">
-      <ul className="flex justify-around w-full">
-        {["Home", "Skills", "Projects", "Resume"].map((section, index) => {
-          return (
-            <li
-              key={index}
-              className={`relative cursor-pointer text-lg font-light ${
-                activeSection === index + 1 ? "font-bold" : "font-light"
-              }`}
-              onClick={() => handleClick(index + 1)}
-            >
-              {section}
-              {activeSection === index + 1 && (
-                <span className="absolute left-0 right-0 h-1 bg-pink-500 bottom-0 mx-auto w-6"></span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
-  );
-};
+const highlights = [
+  "Production-grade full-stack systems",
+  "Interactive 3D and real-time web experiences",
+  "LLM-integrated desktop and web applications",
+  "Cross-platform delivery across web, desktop, and mobile",
+];
 
-const easeInOutQuad = (t, b, c, d) => { 
-  t /= d / 2; 
-  if (t < 1) return (c / 2) * t * t + b; 
-  t--; 
-  return (-c / 2) * (t * (t - 2) - 1) + b; 
-};
+const skillGroups = [
+  {
+    title: "Frontend",
+    items: ["React", "Next.js", "Svelte", "Vite", "Tailwind CSS", "HTML5"],
+  },
+  {
+    title: "Backend and APIs",
+    items: [
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+      "Socket.IO",
+      "WebSocket",
+      "STOMP",
+    ],
+  },
+  {
+    title: "AI and ML",
+    items: [
+      "OpenAI",
+      "Gemini",
+      "Anthropic",
+      "RAG",
+      "MediaPipe",
+      "Whisper",
+      "Sherpa-ONNX",
+    ],
+  },
+  {
+    title: "3D and Graphics",
+    items: [
+      "Three.js",
+      "React Three Fiber",
+      "WebGL",
+      "Particle Systems",
+      "GSAP",
+    ],
+  },
+  {
+    title: "Desktop and Systems",
+    items: ["Electron", "IPC", "NSIS", "DMG Packaging", "Multi-window Systems"],
+  },
+  {
+    title: "Cloud and Tooling",
+    items: ["AWS", "Azure", "Aliyun OSS", "Docker", "Vercel", "Git"],
+  },
+];
 
-const smoothScrollTo = (targetPosition, duration = 1000) => { 
-    const startPosition = window.scrollY; 
-    const distance = targetPosition - startPosition; 
-    let startTime = null;
-  
-    const animation = (currentTime) => { 
-      if (startTime === null) startTime = currentTime; 
-      const timeElapsed = currentTime - startTime; 
-      const run = easeInOutQuad(timeElapsed, startPosition, distance, duration); 
-      window.scrollTo(0, run); 
-  
-      if (timeElapsed < duration) requestAnimationFrame(animation); 
-    };
-  
-    requestAnimationFrame(animation); 
+const experience = [
+  {
+    role: "Cross-Platform Web and Software Engineer",
+    company: "Sencity Corp.",
+    period: "May 2025 - Present",
+    points: [
+      "Architected and shipped enterprise dashboard systems that orchestrate 6+ simultaneous display outputs in real time for large-scale installations.",
+      "Built immersive 3D web experiences with Three.js and React Three Fiber, including particle-heavy scenes, custom shaders, HDR environments, and live interaction layers.",
+      "Developed LLM and speech-enabled desktop software using Electron, Whisper, Sherpa-ONNX, STOMP, and automated multi-window control flows.",
+      "Delivered production React, Next.js, and Tailwind platforms spanning data portals, model showrooms, and AI-powered interfaces connected to modern LLM APIs.",
+    ],
+  },
+  {
+    role: "Frontend Developer Intern",
+    company: "Sencity Corp.",
+    period: "Nov 2024 - Mar 2025",
+    points: [
+      "Contributed to front-end development and UniApp debugging across web and mobile products.",
+      "Handled deployments, SSL provisioning, and backend log monitoring to support stable production releases.",
+      "Built a standalone AI photo booth experience with a JavaScript front end and PHP-based API integrations.",
+    ],
+  },
+];
+
+const projects = [
+  {
+    title: "Real-Time Multi-Screen Event Platform",
+    summary:
+      "A synchronized enterprise display system for large experiences, with distributed state, timed playlists, and device orchestration across Linux, Windows, and macOS.",
+    tags: ["Electron", "Socket.IO", "STOMP", "TypeScript"],
+  },
+  {
+    title: "Interactive 3D Installation Experiences",
+    summary:
+      "Web-first 3D environments combining custom particle systems, gesture recognition, and graphics pipelines designed for live installations and brand activations.",
+    tags: ["Three.js", "React Three Fiber", "WebGL", "MediaPipe"],
+  },
+  {
+    title: "HALO Data Cleaning System",
+    summary:
+      "A human-and-LLM-in-the-loop data cleaning workflow focused on pairing automated suggestions with human feedback for higher-quality outcomes.",
+    tags: ["Python", "LLMs", "Data Systems"],
+  },
+  {
+    title: "Fluencio",
+    summary:
+      "A public speaking improvement product spanning app and web surfaces, with speech pacing and filler-word feedback designed to build speaking confidence.",
+    tags: ["Java", "Mobile", "Speech Analysis"],
+  },
+];
+
+const education = [
+  {
+    degree: "Master of Science in Computer Science",
+    school: "Harbin Institute of Technology",
+    meta: "GPA: 90.6 / 100.0",
+    period: "Sep 2022 - Jan 2025",
+  },
+  {
+    degree: "Bachelor of Science in Software Engineering",
+    school: "Jinnah University for Women",
+    meta: "CGPA: 3.84 / 4.00",
+    period: "Jan 2018 - Dec 2021",
+  },
+];
+
+const awards = [
+  "Chinese Government Scholarship for a fully funded Master's degree",
+  "Merit-Based Full Semester Scholarship",
+  "Best Undergraduate Project Award",
+  "Women in Computing, Java Q&A Winner",
+];
+
+const navItems = [
+  ["About", "#about"],
+  ["Experience", "#experience"],
+  ["Projects", "#projects"],
+  ["Skills", "#skills"],
+  ["Contact", "#contact"],
+];
+
+const EMAILJS_SERVICE_ID = "service_zrncyp3";
+const EMAILJS_TEMPLATE_ID = "template_26uv1jr";
+const EMAILJS_PUBLIC_KEY = "rugCUUjgyzoZNjKPq";
+const SUCCESS_MESSAGE = "Message sent successfully. Thank you for reaching out.";
+
+function App() {
+  const [activeSection, setActiveSection] = useState("");
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    company: "",
+    message: "",
+  });
+  const [formMessage, setFormMessage] = useState("");
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormState((current) => ({ ...current, [name]: value }));
   };
-  
-  function App() { 
-      const [activeSection, setActiveSection] = useState(1); 
-      const [isScrolling, setIsScrolling] = useState(false); 
-      const [touchStart, setTouchStart] = useState(0);
-      const [touchEnd, setTouchEnd] = useState(0);
-      const debounceTimeoutRef = useRef(null);
-      const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
-      const [scrollPosition, setScrollPosition] = useState(0); // Save scroll position
-    
-      const section1Ref = useRef(null); 
-      const section2Ref = useRef(null); 
-      const section3Ref = useRef(null);
-    
-      const sections = useMemo(() => [section1Ref, section2Ref, section3Ref], []);
-    
-    const handleWheelScroll = useCallback((event) => { 
-      if (isMenuOpen) {
-        console.log('Scroll event blocked because the menu is open.'); // Debug
-        return; // Prevent scrolling when the menu is open
+
+  const resetForm = () => {
+    setFormState({
+      name: "",
+      email: "",
+      company: "",
+      message: "",
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setFormMessage("");
+
+    const name = formState.name.trim();
+    const email = formState.email.trim();
+    const company = formState.company.trim();
+    const message = formState.message.trim();
+
+    if (!isFormReady) {
+      setFormMessage("Please add your name, a valid email, and a message.");
+      return;
+    }
+
+    setIsSending(true);
+
+    try {
+      const response = await fetch(
+        "https://api.emailjs.com/api/v1.0/email/send",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            service_id: EMAILJS_SERVICE_ID,
+            template_id: EMAILJS_TEMPLATE_ID,
+            user_id: EMAILJS_PUBLIC_KEY,
+            template_params: {
+              name,
+              email,
+              company,
+              message,
+              from_name: name,
+              reply_to: email,
+            },
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const body = await response.text();
+        throw new Error(`EmailJS request failed (${response.status}): ${body}`);
       }
-      event.preventDefault(); 
-      if (isScrolling) return; 
-      
-      console.log(`Wheel scroll event. deltaY: ${event.deltaY}, activeSection: ${activeSection}`); // Debug
 
-      const currentSectionIndex = activeSection - 1; 
-      setIsScrolling(true);
+      resetForm();
+      setFormMessage(SUCCESS_MESSAGE);
+    } catch (err) {
+      setFormMessage(
+        err?.message || "Unable to send right now. Please try again shortly.",
+      );
+    } finally {
+      setIsSending(false);
+    }
+  };
 
-      const scrollToSection = (index) => { 
-        console.log(`Scrolling to section index ${index}`); // Debug
-        const targetPosition = sections[index].current.offsetTop; 
-        smoothScrollTo(targetPosition, 1200); 
-        setActiveSection(index + 1); 
+  const clearHash = () => {
+    if (window.location.hash) {
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}`,
+      );
+    }
+  };
+
+  useEffect(() => {
+    const sectionIds = navItems.map(([, href]) => href.replace("#", ""));
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visibleEntry?.target?.id) {
+          setActiveSection(visibleEntry.target.id);
+        }
+      },
+      {
+        rootMargin: "-32% 0px -52% 0px",
+        threshold: [0.08, 0.18, 0.32, 0.5],
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > window.innerHeight * 0.7);
+
+      if (window.scrollY < 12) {
+        clearHash();
+        setActiveSection("");
+      }
     };
 
-    if (event.deltaY > 0) { 
-      if (currentSectionIndex < sections.length - 1) { 
-        scrollToSection(currentSectionIndex + 1); 
-      } 
-    } else { 
-      if (currentSectionIndex > 0) { 
-        scrollToSection(currentSectionIndex - 1); 
-      } 
-    }
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
-    setTimeout(() => { 
-      setIsScrolling(false); 
-      console.log('Finished scrolling'); // Debug
-    }, 1300); 
-}, [activeSection, isScrolling, sections, isMenuOpen]);
-const handleTouchStart = useCallback((event) => {
-  if (isMenuOpen) {
-    console.log('TouchStart event blocked because the menu is open.');
-    return; // Prevent touch interaction if menu is open
-  }
-  setTouchStart(event.targetTouches[0].clientY);
-}, [isMenuOpen]);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-const handleTouchMove = useCallback((event) => {
-  if (isMenuOpen) {
-    console.log('TouchMove event blocked because the menu is open.');
-    return; // Prevent touch interaction if menu is open
-  }
-  setTouchEnd(event.targetTouches[0].clientY);
-}, [isMenuOpen]);
+  useEffect(() => {
+    if (formMessage !== SUCCESS_MESSAGE) return undefined;
 
-const handleTouchEnd = useCallback(() => {
-  if (isMenuOpen) {
-    console.log('TouchEnd event blocked because the menu is open.');
-    return; // Prevent touch interaction if menu is open
-  }
+    const timeoutId = window.setTimeout(() => {
+      setFormMessage("");
+    }, 10000);
 
-  const touchDistance = Math.abs(touchStart - touchEnd);
-  const currentSectionIndex = activeSection - 1;
+    return () => window.clearTimeout(timeoutId);
+  }, [formMessage]);
 
-  console.log(`Touch end detected with distance ${touchDistance}`);
+  const scrollToTop = () => {
+    clearHash();
+    setActiveSection("");
+    document.activeElement?.blur?.();
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo(0, 0);
+  };
 
-  // Only allow scrolling one section at a time
-  if (touchDistance > 50) {  // Increase the threshold to reduce accidental scrolling
-    if (touchStart - touchEnd > 50) { // Swipe up
-      if (currentSectionIndex < sections.length - 1) {
-        const targetPosition = sections[currentSectionIndex + 1].current.offsetTop;
-        smoothScrollTo(targetPosition, 1200);
-        setActiveSection(currentSectionIndex + 2);
-        console.log(`Scrolling up to section ${currentSectionIndex + 2}`);
-      }
-    } else if (touchStart - touchEnd < -50) { // Swipe down
-      if (currentSectionIndex > 0) {
-        const targetPosition = sections[currentSectionIndex - 1].current.offsetTop;
-        smoothScrollTo(targetPosition, 1200);
-        setActiveSection(currentSectionIndex);
-        console.log(`Scrolling down to section ${currentSectionIndex}`);
-      }
-    }
-  }
-}, [touchStart, touchEnd, activeSection, sections, isMenuOpen]);
+  const isFormReady =
+    formState.name.trim().length > 0 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email.trim()) &&
+    formState.message.trim().length > 0;
 
-// Ensure all touch states are reset after menu closes
-const resetTouchStates = () => {
-  setTouchStart(0);
-  setTouchEnd(0);
-  console.log('Touch states reset');
-};
-          
-          const handleClick = (sectionNumber) => {
-            clearTimeout(debounceTimeoutRef.current);
-            
-            if (sectionNumber === 4) {
-              console.log("Resume clicked");
-              // Trigger the download
-              const resumeLink = document.createElement('a');
-              resumeLink.href = '/RabiyaSalehjeeCV.pdf'; // Path to the resume file
-              resumeLink.download = 'RabiyaSalehjeeCV.pdf'; // Set download name
-              resumeLink.click();
-              return;
-            }
-
-            debounceTimeoutRef.current = setTimeout(() => {
-              const sectionRef = sections[sectionNumber - 1].current;
-              const offsetTop = sectionRef.offsetTop;
-              console.log(`Handle click - Scrolling to section ${sectionNumber}`); // Debug
-              smoothScrollTo(offsetTop, 1000); // Scroll to the section
-              setActiveSection(sectionNumber); // Set the active section
-            }, 100); 
-      
-            if (isMenuOpen) {
-              console.log('Closing menu after click'); // Debug
-              toggleMenu();
-            }
-          };
-          const enableScroll = () => {
-            document.body.style.position = ''; // Re-enable scrolling
-            document.body.style.top = '';
-            window.scrollTo(0, scrollPosition); 
-            console.log('Scroll enabled, restored position:', scrollPosition); // Debug
-            document.body.style.overflow = ''; // Allow scrolling
-          };
-      
-          const disableScroll = () => {
-            const currentScrollY = window.scrollY; // Get the current scroll position
-            setScrollPosition(currentScrollY); // Save the current scroll position
-            document.body.style.position = 'fixed'; // Lock page in place
-            document.body.style.top = `-${currentScrollY}px`;
-            document.body.style.left = '0';
-            document.body.style.right = '0';
-            document.body.style.overflow = 'hidden'; // Disable scrolling
-            console.log('Scroll disabled, saved position:', currentScrollY); // Debug
-          };
-          
-          // Modify toggleMenu to reset touch states
-const toggleMenu = (event) => {
-  if (event) {
-    event.stopPropagation();
+  const handleNavClick = (event, href) => {
     event.preventDefault();
-  }
 
-  if (!isMenuOpen) {
-    console.log('Opening menu');
-    disableScroll(); // Disable scrolling when the menu opens
-  } else {
-    console.log('Closing menu');
-    enableScroll(); // Enable scrolling when the menu closes
-    resetTouchStates(); // Reset touch states to avoid accidental scroll jumps
-  }
+    const sectionId = href.replace("#", "");
+    const section = document.getElementById(sectionId);
 
-  setIsMenuOpen(!isMenuOpen); // Toggle the menu state
-  console.log('Menu state toggled, isMenuOpen:', !isMenuOpen);
-};
-            
-            useEffect(() => { 
-              console.log('Page load - Initial scroll restoration setup'); // Debug
-              if ('scrollRestoration' in window.history) { 
-                window.history.scrollRestoration = 'manual'; 
-              } 
-              window.scrollTo(0, 0); 
-            }, []);
-        
-            useEffect(() => { 
-              window.addEventListener("wheel", handleWheelScroll, { passive: false }); 
-              window.addEventListener("touchstart", handleTouchStart, { passive: false });
-              window.addEventListener("touchmove", handleTouchMove, { passive: false });
-              window.addEventListener("touchend", handleTouchEnd, { passive: false });
-        
-              console.log('Scroll and touch listeners added'); // Debug
-              
-              return () => { 
-                window.removeEventListener("wheel", handleWheelScroll); 
-                window.removeEventListener("touchstart", handleTouchStart);
-                window.removeEventListener("touchmove", handleTouchMove);
-                window.removeEventListener("touchend", handleTouchEnd);
-                console.log('Scroll and touch listeners removed'); // Debug
-              }; 
-            }, [handleWheelScroll, handleTouchStart, handleTouchMove, handleTouchEnd]);
-            return (   
-              <div className="relative">   
-                {/* Navigation Bar */}   
-                <Navbar activeSection={activeSection} handleClick={handleClick} />   
-                {/* Custom Cursor */}   
-                <CustomCursor /> 
-        
-                {/* Burger Icon for Mobile */}   
-                <div className="md:hidden fixed top-0 right-0 p-4 z-50" style={{ zIndex: 1000 }}>   
-                  <button onClick={toggleMenu} className="flex items-center text-white">   
-                    {isMenuOpen ? <FaTimes size={28} /> : <FaBars size={28} />}   
-                    <span className="text-sm ml-2">Menu</span>   
-                  </button>   
+    if (!section) return;
+
+    clearHash();
+    setActiveSection(sectionId);
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  return (
+    <div className="portfolio-shell">
+      <div className="portfolio-particles" aria-hidden="true">
+        <SharedParticles id="portfolio-particles" />
+      </div>
+
+      <header className="site-header">
+        <a
+          className="brand-mark"
+          href="#top"
+          aria-label="Rabiya Salehjee home"
+          onClick={(event) => {
+            event.preventDefault();
+            scrollToTop();
+          }}
+        >
+          RS
+        </a>
+        <nav className="site-nav" aria-label="Primary">
+          {navItems.map(([label, href]) => (
+            <a
+              key={label}
+              href={href}
+              className={
+                activeSection === href.replace("#", "")
+                  ? "is-active"
+                  : undefined
+              }
+              aria-current={
+                activeSection === href.replace("#", "") ? "page" : undefined
+              }
+              onClick={(event) => handleNavClick(event, href)}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+        <a
+          className="resume-link"
+          href="/RabiyaSalehjeeCV.pdf"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <FaDownload aria-hidden="true" />
+          Resume
+        </a>
+      </header>
+
+      <main id="top">
+        <section className="hero-section">
+          <div className="hero-copy">
+            <p className="eyebrow">Full-Stack Software Engineer</p>
+            <h1>Rabiya Salehjee</h1>
+            <p className="hero-titleline">
+              AI-powered products, 3D web experiences, and real-time systems.
+            </p>
+            <p className="hero-text">
+              I design and ship modern web, desktop, and real-time systems
+              across AI integration, 3D interaction, and cross-platform product
+              delivery. My work blends product thinking, engineering depth, and
+              visual ambition.
+            </p>
+
+            <div className="hero-actions">
+              <a className="primary-button" href="#contact">
+                Start a conversation
+                <FaArrowRight aria-hidden="true" />
+              </a>
+              <a className="secondary-button" href="#projects">
+                Explore selected work
+              </a>
+            </div>
+
+            <ul className="contact-inline" aria-label="Contact details">
+              <li>
+                <FaEnvelope aria-hidden="true" />
+                <a href="mailto:rabiya.salehjee@gmail.com">
+                  rabiya.salehjee@gmail.com
+                </a>
+              </li>
+              <li>
+                <FaPhoneAlt aria-hidden="true" />
+                <a href="tel:+8618345350856">+86 183 4535 0856</a>
+              </li>
+            </ul>
+          </div>
+
+          <aside className="hero-panel" aria-label="Professional overview">
+            <div className="hero-panel-card">
+              <span className="panel-label">Current focus</span>
+              <h2>
+                Real-time systems, AI workflows, and high-impact interfaces
+              </h2>
+              <p>
+                From multi-screen installations to LLM-enabled products, I enjoy
+                building systems that feel technically sharp and experientially
+                memorable.
+              </p>
+            </div>
+
+            <div className="hero-stats">
+              <article>
+                <strong>1+ year</strong>
+                <span>industry experience</span>
+              </article>
+              <article>
+                <strong>6+ displays</strong>
+                <span>orchestrated in real time</span>
+              </article>
+              <article>
+                <strong>Cross-platform</strong>
+                <span>web, desktop, mobile</span>
+              </article>
+            </div>
+          </aside>
+        </section>
+
+        <section id="about" className="content-section two-column-section">
+          <div className="section-heading">
+            <p className="eyebrow">About</p>
+            <h2>Engineering with product clarity and visual range</h2>
+          </div>
+          <div className="content-card prose-card">
+            <p>
+              I’m a software engineer with a Master’s in Computer Science and
+              hands-on experience building production-grade applications across
+              the full stack. My recent work spans enterprise dashboards,
+              interactive 3D web experiences, and desktop applications with LLM
+              and speech integration.
+            </p>
+            <p>
+              I’m especially strong when a project needs both technical
+              execution and creative shaping: architecting data and event flows,
+              polishing user-facing interactions, and delivering something that
+              feels robust in production.
+            </p>
+          </div>
+          <div className="content-card highlights-card">
+            <div className="mini-heading">
+              <FaRobot aria-hidden="true" />
+              <span>Core strengths</span>
+            </div>
+            <ul className="highlight-list">
+              {highlights.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section id="experience" className="content-section">
+          <div className="section-heading">
+            <p className="eyebrow">Experience</p>
+            <h2>Recent roles and production work</h2>
+          </div>
+          <div className="timeline">
+            {experience.map((item) => (
+              <article
+                key={`${item.role}-${item.period}`}
+                className="timeline-item"
+              >
+                <div className="timeline-meta">
+                  <p>{item.period}</p>
                 </div>
-        
-                {/* Mobile Menu with Curtain Effect */}
-                <div className={`fixed top-0 left-0 w-full h-full text-white z-50 flex flex-col items-center justify-center transform transition-all duration-500 ease-in-out ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`} 
-                     style={{ backgroundColor: "#1f2940", clipPath: "polygon(0 0, 90% 0, 75% 100%, 0% 100%)" }}>
-                  <ul className="space-y-8 text-lg font-fira">
-                    <li 
-                      style={{ transform: `translateY(0px)` }} 
-                      onClick={() => {
-                        console.log('Home clicked');
-                        handleClick(1); // Scroll to section 1 (Design)
-                        toggleMenu();    // Close mobile menu after selecting a section
-                      }}
-                      className="hover:text-gray-300"
-                    >
-                      Home
-                    </li>
-                    <li 
-                      style={{ transform: `translateY(20px)` }} 
-                      onClick={() => {
-                        console.log('Skills clicked');
-                        handleClick(2); // Scroll to section 2 (Section2)
-                        toggleMenu();    // Close mobile menu after selecting a section
-                      }}
-                      className="hover:text-gray-300"
-                    >
-                      Skills
-                    </li>
-                    <li 
-                      style={{ transform: `translateY(40px)` }} 
-                      onClick={() => {
-                        console.log('Projects clicked');
-                        handleClick(3); // Scroll to section 3 (Section3)
-                        toggleMenu();    // Close mobile menu after selecting a section
-                      }}
-                      className="hover:text-gray-300"
-                    >
-                      Projects
-                    </li>
-                    <li 
-                      style={{ transform: `translateY(60px)` }} 
-                      onClick={() => {
-                        console.log('Resume clicked');
-                        handleClick(4);
-                        // Initiate resume download
-                        //const resumeLink = document.createElement('a');
-                        //resumeLink.href = '/RabiyaSalehjeeCV.pdf'; // Replace with actual resume path
-                        //resumeLink.download = 'RabiyaSalehjeeCV.pdf';
-                        //resumeLink.click();
-                        toggleMenu();    // Close mobile menu after download
-                      }}
-                      className="hover:text-gray-300"
-                    >
-                      Resume
-                    </li>
+                <div className="timeline-content">
+                  <h3>{item.role}</h3>
+                  <p className="timeline-company">{item.company}</p>
+                  <ul>
+                    {item.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
                   </ul>
                 </div>
-        
-                {/* Scroll Indicator Dots */} 
-                <div className="dots-container fixed right-8 top-1/2 transform -translate-y-1/2 z-50" style={{ zIndex: 50 }}>
-                  <div className="flex flex-col items-center gap-4">
-                    <div className={`w-3 h-3 rounded-full ${activeSection === 1 ? "bg-white" : "bg-gray-500"}`}></div>
-                    <div className={`w-3 h-3 rounded-full ${activeSection === 2 ? "bg-white" : "bg-gray-500"}`}></div>
-                    <div className={`w-3 h-3 rounded-full ${activeSection === 3 ? "bg-white" : "bg-gray-500"}`}></div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="projects" className="content-section">
+          <div className="section-heading">
+            <p className="eyebrow">Selected Work</p>
+            <h2>Projects and product directions worth exploring</h2>
+          </div>
+          <div className="project-grid">
+            {projects.map((project) => (
+              <article key={project.title} className="project-card">
+                <h3>{project.title}</h3>
+                <p>{project.summary}</p>
+                <ul
+                  className="tag-list"
+                  aria-label={`${project.title} technologies`}
+                >
+                  {project.tags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="skills" className="content-section">
+          <div className="section-heading">
+            <p className="eyebrow">Skills</p>
+            <h2>Technical capabilities across product layers</h2>
+          </div>
+          <div className="skills-grid">
+            {skillGroups.map((group) => (
+              <article key={group.title} className="skill-card">
+                <h3>{group.title}</h3>
+                <ul>
+                  {group.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="content-section info-grid-section">
+          <div>
+            <div className="section-heading">
+              <p className="eyebrow">Education</p>
+              <h2>Academic foundation</h2>
+            </div>
+            <div className="stack-list">
+              {education.map((item) => (
+                <article key={item.degree} className="stack-card">
+                  <div className="stack-row">
+                    <h3>{item.degree}</h3>
+                    <span>{item.period}</span>
                   </div>
-                </div>
-        
-                {/* Section 1 */} 
-                <div ref={section1Ref} className="w-full h-screen relative overflow-hidden"> 
-                  <Design 
-                    section2Ref={section2Ref}
-                    smoothScrollTo={smoothScrollTo}
-                    setActiveSection={setActiveSection}
-                    sections={sections}
-                  />
-                  {activeSection === 1 && ( 
-                    <div onClick={() => smoothScrollTo(sections[1].current.offsetTop, 1200)} className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-white cursor-pointer"> 
-                      <span className="text-lg cursor-pointer">Explore</span> 
-                      <FaArrowDown className="mt-2 cursor-pointer animate-bounce" size={24} /> 
-                    </div> 
-                  )} 
-                </div>
-        
-                {/* Section 2 */} 
-                <div ref={section2Ref} className="w-full h-screen relative overflow-hidden"> 
-                  <Section2 /> 
-                </div>
-        
-                {/* Section 3 */} 
-                <div ref={section3Ref} className="w-full h-screen relative overflow-hidden"> 
-                  <Section3 /> 
-                </div> 
-              </div> 
-            ); 
-        }
-        
-        export default App;
-        
+                  <p>{item.school}</p>
+                  <small>{item.meta}</small>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="section-heading">
+              <p className="eyebrow">Recognition</p>
+              <h2>Awards and languages</h2>
+            </div>
+            <div className="stack-list">
+              <article className="stack-card">
+                <h3>Awards and scholarships</h3>
+                <ul className="simple-list">
+                  {awards.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+              <article className="stack-card">
+                <h3>Languages</h3>
+                <ul className="simple-list">
+                  <li>English: Fluent</li>
+                  <li>Urdu / Hindi: Native</li>
+                  <li>Chinese (Mandarin): Basic</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="content-section contact-section">
+          <div className="section-heading">
+            <p className="eyebrow">Contact</p>
+            <h2>Let’s build something thoughtful and ambitious</h2>
+          </div>
+
+          <div className="contact-layout">
+            <div className="content-card contact-copy">
+              <p>
+                I’m open to software engineering roles, cross-platform product
+                work, interactive installations, and AI-forward collaborations.
+              </p>
+              <div className="contact-links">
+                <a href="mailto:rabiya.salehjee@gmail.com">
+                  <FaEnvelope aria-hidden="true" />
+                  Email
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/rabiyasalehjee99/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaLinkedin aria-hidden="true" />
+                  LinkedIn
+                </a>
+                <a
+                  href="https://github.com/rabiyasalehjee"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaGithub aria-hidden="true" />
+                  GitHub
+                </a>
+              </div>
+            </div>
+
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <label htmlFor="name">
+                Name <span aria-hidden="true">*</span>
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                value={formState.name}
+                onChange={handleChange}
+                disabled={isSending}
+                required
+              />
+
+              <label htmlFor="email">
+                Email <span aria-hidden="true">*</span>
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formState.email}
+                onChange={handleChange}
+                disabled={isSending}
+                required
+              />
+
+              <label htmlFor="company">Company or project</label>
+              <input
+                id="company"
+                name="company"
+                type="text"
+                value={formState.company}
+                onChange={handleChange}
+                disabled={isSending}
+              />
+
+              <label htmlFor="message">
+                Message <span aria-hidden="true">*</span>
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                value={formState.message}
+                onChange={handleChange}
+                placeholder="Tell me a little about what you’re building."
+                disabled={isSending}
+                required
+              />
+
+              <button
+                type="submit"
+                className="primary-button form-button"
+                disabled={isSending || !isFormReady}
+              >
+                {isSending ? "Sending..." : "Send message"}
+              </button>
+
+              {formMessage ? (
+                <p className="form-status" role="status">
+                  {formMessage}
+                </p>
+              ) : null}
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <div className="scroll-controls" aria-label="Page scroll control">
+        <button
+          type="button"
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+          disabled={!showScrollTop}
+        >
+          <FaArrowUp aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default App;
