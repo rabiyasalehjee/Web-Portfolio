@@ -1,0 +1,32 @@
+# Rabiya Salehjee Portfolio
+
+Rabiya Salehjee is a full-stack software engineer focused on AI-powered products, interactive 3D web experiences, Electron desktop applications, and real-time systems.
+
+## Core Profile
+
+- Name: Rabiya Salehjee
+- Role: Full-Stack Software Engineer
+- Email: rabiya.salehjee@gmail.com
+- LinkedIn: https://www.linkedin.com/in/rabiyasalehjee99/
+- GitHub: https://github.com/rabiyasalehjee
+
+## Technical Focus
+
+- Frontend: React, Next.js, Svelte, Vite, Tailwind CSS, HTML5
+- Backend and APIs: Node.js, Express.js, REST APIs, Socket.IO, WebSocket, STOMP
+- AI and ML: OpenAI, Gemini, Anthropic, RAG, MediaPipe, Whisper, Sherpa-ONNX
+- 3D and Graphics: Three.js, React Three Fiber, WebGL, particle systems, GSAP
+- Desktop and Systems: Electron, IPC, NSIS, DMG packaging, multi-window systems
+- Cloud and Tooling: AWS, Azure, Aliyun OSS, Docker, Vercel, Git
+
+## Selected Work
+
+- Real-time multi-screen event platforms
+- Interactive 3D installation experiences
+- Human-and-LLM-in-the-loop data cleaning workflows
+- Public speaking feedback products
+
+## Education
+
+- Master of Science in Computer Science, Harbin Institute of Technology
+- Bachelor of Science in Software Engineering, Jinnah University for Women

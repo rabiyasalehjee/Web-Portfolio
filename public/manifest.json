@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Rabiya Salehjee",
+  "name": "Rabiya Salehjee | Full-Stack Software Engineer",
+  "description": "Portfolio of Rabiya Salehjee, a full-stack software engineer building AI-powered products, 3D web experiences, and real-time systems.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#10161f",
+  "background_color": "#0a1019"
 }
