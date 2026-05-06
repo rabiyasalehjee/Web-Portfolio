@@ -1,6 +1,6 @@
 # Rabiya Salehjee Portfolio
 
-Rabiya Salehjee is a full-stack software engineer focused on AI-powered products, interactive 3D web experiences, Electron desktop applications, and real-time systems.
+Rabiya Salehjee is a full-stack software engineer focused on AI-integrated applications, interactive 3D web interfaces, Electron desktop applications, and real-time systems.
 
 ## Core Profile
 

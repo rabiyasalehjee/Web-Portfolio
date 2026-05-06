@@ -13,10 +13,19 @@ import SharedParticles from "./components/SharedParticles";
 import "./App.css";
 
 const highlights = [
-  "Production-grade full-stack systems",
-  "Interactive 3D and real-time web experiences",
+  "Production full-stack application development",
+  "Interactive 3D and real-time web interfaces",
   "LLM-integrated desktop and web applications",
-  "Cross-platform delivery across web, desktop, and mobile",
+  "Cross-platform engineering for web, desktop, and mobile",
+];
+
+const capabilities = [
+  "AI Interfaces",
+  "3D Web",
+  "Electron Apps",
+  "Real-Time Systems",
+  "Full-Stack Engineering",
+  "Product Development",
 ];
 
 const skillGroups = [
@@ -95,25 +104,25 @@ const projects = [
   {
     title: "Real-Time Multi-Screen Event Platform",
     summary:
-      "A synchronized enterprise display system for large experiences, with distributed state, timed playlists, and device orchestration across Linux, Windows, and macOS.",
+      "A synchronized enterprise display platform with distributed state, playlist scheduling, and device orchestration across Linux, Windows, and macOS.",
     tags: ["Electron", "Socket.IO", "STOMP", "TypeScript"],
   },
   {
     title: "Interactive 3D Installation Experiences",
     summary:
-      "Web-first 3D environments combining custom particle systems, gesture recognition, and graphics pipelines designed for live installations and brand activations.",
+      "Browser-based 3D experiences combining custom particle systems, gesture recognition, and WebGL rendering for interactive installations.",
     tags: ["Three.js", "React Three Fiber", "WebGL", "MediaPipe"],
   },
   {
     title: "HALO Data Cleaning System",
     summary:
-      "A human-and-LLM-in-the-loop data cleaning workflow focused on pairing automated suggestions with human feedback for higher-quality outcomes.",
+      "A human-and-LLM-in-the-loop data cleaning workflow that combines automated recommendations with user review for higher-quality datasets.",
     tags: ["Python", "LLMs", "Data Systems"],
   },
   {
     title: "Fluencio",
     summary:
-      "A public speaking improvement product spanning app and web surfaces, with speech pacing and filler-word feedback designed to build speaking confidence.",
+      "A public speaking improvement product with app and web interfaces for pacing analysis, filler-word feedback, and structured practice.",
     tags: ["Java", "Mobile", "Speech Analysis"],
   },
 ];
@@ -305,6 +314,32 @@ function App() {
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    const revealItems = document.querySelectorAll(
+      ".content-section, .content-card, .timeline-item, .project-card, .skill-card, .stack-card",
+    );
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.12 },
+    );
+
+    revealItems.forEach((item, index) => {
+      item.classList.add("reveal-item");
+      item.style.setProperty("--reveal-delay", `${Math.min(index % 6, 5) * 70}ms`);
+      observer.observe(item);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const scrollToTop = () => {
     clearHash();
     setActiveSection("");
@@ -427,13 +462,20 @@ function App() {
             <p className="eyebrow">Full-Stack Software Engineer</p>
             <h1>Rabiya Salehjee</h1>
             <p className="hero-titleline">
-              AI-powered products, 3D web experiences, and real-time systems.
+              Full-stack software engineer building AI-integrated applications, 3D web interfaces, and real-time systems.
             </p>
+            <div className="capability-strip" aria-label="Core capabilities">
+              <div className="capability-track">
+                {[...capabilities, ...capabilities].map((item, index) => (
+                  <span key={`${item}-${index}`}>{item}</span>
+                ))}
+              </div>
+            </div>
             <p className="hero-text">
-              I design and ship modern web, desktop, and real-time systems
-              across AI integration, 3D interaction, and cross-platform product
-              delivery. My work blends product thinking, engineering depth, and
-              visual ambition.
+              I build production-ready software across web, desktop, and
+              interactive environments, with experience in LLM integration,
+              WebGL-based interfaces, real-time communication, and
+              cross-platform deployment.
             </p>
 
             <div className="hero-actions">
@@ -464,12 +506,12 @@ function App() {
             <div className="hero-panel-card">
               <span className="panel-label">Current focus</span>
               <h2>
-                Real-time systems, AI workflows, and high-impact interfaces
+                AI-integrated software, real-time systems, and production web interfaces
               </h2>
               <p>
-                From multi-screen installations to LLM-enabled products, I enjoy
-                building systems that feel technically sharp and experientially
-                memorable.
+                My work focuses on reliable application architecture,
+                responsive interfaces, and practical integrations that move
+                products from concept to production.
               </p>
             </div>
 
@@ -480,7 +522,7 @@ function App() {
               </article>
               <article>
                 <strong>Interactive systems</strong>
-                <span>AI, 3D, and real-time interfaces</span>
+                <span>AI, WebGL, and real-time interfaces</span>
               </article>
               <article>
                 <strong>Cross-platform</strong>
@@ -493,21 +535,21 @@ function App() {
         <section id="about" className="content-section two-column-section">
           <div className="section-heading">
             <p className="eyebrow">About</p>
-            <h2>Engineering with product clarity and visual range</h2>
+            <h2>Engineering reliable software with clear product purpose</h2>
           </div>
           <div className="content-card prose-card">
             <p>
               I’m a software engineer with a Master’s in Computer Science and
-              hands-on experience building production-grade applications across
-              the full stack. My recent work spans enterprise dashboards,
-              interactive 3D web experiences, and desktop applications with LLM
-              and speech integration.
+              hands-on experience delivering production applications across the
+              full stack. My recent work includes enterprise dashboards,
+              interactive 3D web interfaces, and desktop applications with LLM
+              and speech-recognition capabilities.
             </p>
             <p>
-              I’m especially strong when a project needs both technical
-              execution and creative shaping: architecting data and event flows,
-              polishing user-facing interactions, and delivering something that
-              feels robust in production.
+              I work well on projects that require ownership across architecture,
+              implementation, and user-facing quality: defining data and event
+              flows, building maintainable interfaces, and preparing systems for
+              stable production use.
             </p>
           </div>
           <div className="content-card highlights-card">
@@ -554,7 +596,7 @@ function App() {
         <section id="projects" className="content-section">
           <div className="section-heading">
             <p className="eyebrow">Selected Work</p>
-            <h2>Projects and product directions worth exploring</h2>
+            <h2>Selected engineering work and applied product systems</h2>
           </div>
           <div className="project-grid">
             {projects.map((project) => (
@@ -577,7 +619,7 @@ function App() {
         <section id="skills" className="content-section">
           <div className="section-heading">
             <p className="eyebrow">Skills</p>
-            <h2>Technical capabilities across product layers</h2>
+            <h2>Technical capabilities across application layers</h2>
           </div>
           <div className="skills-grid">
             {skillGroups.map((group) => (
@@ -642,14 +684,15 @@ function App() {
         <section id="contact" className="content-section contact-section">
           <div className="section-heading">
             <p className="eyebrow">Contact</p>
-            <h2>Let’s build something thoughtful and ambitious</h2>
+            <h2>Available for software engineering opportunities</h2>
           </div>
 
           <div className="contact-layout">
             <div className="content-card contact-copy">
               <p>
-                I’m open to software engineering roles, cross-platform product
-                work, interactive installations, and AI-forward collaborations.
+                I’m open to software engineering roles and projects involving
+                full-stack development, AI integration, interactive interfaces,
+                and cross-platform application delivery.
               </p>
               <div className="contact-links">
                 <a href="mailto:rabiya.salehjee@gmail.com">

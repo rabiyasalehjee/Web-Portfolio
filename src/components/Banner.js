@@ -40,7 +40,7 @@ const Banner = () => {
           Hi, I am Rabiya Salehjee <br />
         </h1>
         <p className="text-lg text-gray-200 font-light max-w-lg mx-auto">
-          A tech enthusiast with a passion for turning creative ideas into reality. Whether it's building innovative projects or solving unique challenges, I'm always eager to push boundaries and explore new possibilities.
+          Full-stack software engineer focused on production applications, AI integration, and interactive web interfaces.
         </p>
       </div>
     </div>
