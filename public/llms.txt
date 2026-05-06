@@ -1,16 +1,21 @@
-# Rabiya Salehjee Portfolio
+# Rabiya Salehjee — Portfolio
 
-Rabiya Salehjee is a full-stack software engineer focused on AI-integrated applications, interactive 3D web interfaces, Electron desktop applications, and real-time systems.
+Rabiya Salehjee is a full-stack software engineer with a Master of Science in Computer Science from Harbin Institute of Technology. She builds AI-integrated applications, interactive 3D web interfaces, Electron desktop applications, and real-time systems for production use.
 
-## Core Profile
+## Identity
 
 - Name: Rabiya Salehjee
 - Role: Full-Stack Software Engineer
+- Current employer: Sencity Corp.
 - Email: rabiya.salehjee@gmail.com
 - LinkedIn: https://www.linkedin.com/in/rabiyasalehjee99/
 - GitHub: https://github.com/rabiyasalehjee
 
-## Technical Focus
+## Summary
+
+Rabiya has delivered production-grade software across web, desktop, and interactive environments. Her work spans enterprise dashboard systems, LLM-integrated desktop apps, WebGL-based 3D installations, and cross-platform real-time platforms. She is experienced in leading full ownership from architecture through deployment.
+
+## Technical Skills
 
 - Frontend: React, Next.js, Svelte, Vite, Tailwind CSS, HTML5
 - Backend and APIs: Node.js, Express.js, REST APIs, Socket.IO, WebSocket, STOMP
@@ -19,14 +24,47 @@ Rabiya Salehjee is a full-stack software engineer focused on AI-integrated appli
 - Desktop and Systems: Electron, IPC, NSIS, DMG packaging, multi-window systems
 - Cloud and Tooling: AWS, Azure, Aliyun OSS, Docker, Vercel, Git
 
-## Selected Work
+## Work Experience
 
-- Real-time multi-screen event platforms
-- Interactive 3D installation experiences
-- Human-and-LLM-in-the-loop data cleaning workflows
-- Public speaking feedback products
+### Cross-Platform Web and Software Engineer — Sencity Corp. (May 2025 – Present)
+- Architected enterprise dashboard systems orchestrating 6+ simultaneous display outputs in real time for large-scale installations
+- Built immersive 3D web experiences with Three.js and React Three Fiber including particle scenes, custom shaders, HDR environments, and live interaction layers
+- Developed LLM and speech-enabled desktop software using Electron, Whisper, Sherpa-ONNX, STOMP, and automated multi-window control flows
+- Delivered production React, Next.js, and Tailwind platforms spanning data portals, model showrooms, and AI-powered interfaces
+
+### Frontend Developer Intern — Sencity Corp. (Nov 2024 – Mar 2025)
+- Contributed to front-end development and UniApp debugging across web and mobile products
+- Handled deployments, SSL provisioning, and backend log monitoring for stable production releases
+- Built a standalone AI photo booth experience with a JavaScript front end and PHP-based API integrations
+
+## Selected Projects
+
+### Real-Time Multi-Screen Event Platform
+A synchronized enterprise display platform with distributed state, playlist scheduling, and device orchestration across Linux, Windows, and macOS. Built with Electron, Socket.IO, STOMP, and TypeScript.
+
+### Interactive 3D Installation Experiences
+Browser-based 3D experiences combining custom particle systems, gesture recognition, and WebGL rendering for interactive installations. Built with Three.js, React Three Fiber, WebGL, and MediaPipe.
+
+### HALO Data Cleaning System
+A human-and-LLM-in-the-loop data cleaning workflow combining automated recommendations with user review for higher-quality datasets. Built with Python and LLM integrations.
+
+### Fluencio
+A public speaking improvement product with app and web interfaces for pacing analysis, filler-word feedback, and structured practice. Built with Java and speech analysis tools.
 
 ## Education
 
-- Master of Science in Computer Science, Harbin Institute of Technology
-- Bachelor of Science in Software Engineering, Jinnah University for Women
+- Master of Science in Computer Science — Harbin Institute of Technology (GPA: 90.6/100, Sep 2022 – Jan 2025)
+- Bachelor of Science in Software Engineering — Jinnah University for Women (CGPA: 3.84/4.00, Jan 2018 – Dec 2021)
+
+## Awards
+
+- Chinese Government Scholarship — fully funded Master's degree
+- Merit-Based Full Semester Scholarship
+- Best Undergraduate Project Award
+- Women in Computing, Java Q&A Winner
+
+## Languages
+
+- English: Fluent
+- Urdu / Hindi: Native
+- Chinese (Mandarin): Basic
