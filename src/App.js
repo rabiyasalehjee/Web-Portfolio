@@ -479,8 +479,8 @@ function App() {
                 <span>industry experience</span>
               </article>
               <article>
-                <strong>6+ displays</strong>
-                <span>orchestrated in real time</span>
+                <strong>Interactive systems</strong>
+                <span>AI, 3D, and real-time interfaces</span>
               </article>
               <article>
                 <strong>Cross-platform</strong>
