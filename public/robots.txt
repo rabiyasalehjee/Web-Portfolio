@@ -34,4 +34,4 @@ Allow: /
 User-agent: Bytespider
 Allow: /
 
-Sitemap: https://rabiyasalehjee.com/sitemap.xml
+Sitemap: https://www.rabiyasalehjee.com/sitemap.xml
