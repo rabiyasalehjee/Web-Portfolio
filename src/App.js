@@ -1,101 +1,160 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FaArrowRight,
   FaArrowUp,
+  FaBolt,
+  FaCubes,
   FaDownload,
   FaEnvelope,
   FaGithub,
+  FaLayerGroup,
   FaLinkedin,
   FaPhoneAlt,
   FaRobot,
 } from "react-icons/fa";
-import SharedParticles from "./components/SharedParticles";
 import "./App.css";
 
-const highlights = [
-  "Production full-stack application development",
-  "Interactive 3D and real-time web interfaces",
-  "LLM-integrated desktop and web applications",
-  "Cross-platform engineering for web, desktop, and mobile",
+const slugify = (value) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+
+const TERMINAL_LINES = [
+  { prompt: "whoami", output: "Rabiya Salehjee, Software Engineer" },
+  {
+    prompt: "cat focus.txt",
+    output: "AI-integrated products, real-time systems, 3D web interfaces.",
+  },
+  { prompt: "cat status.txt", output: "1+ year in production. Open to new roles." },
 ];
 
-const capabilities = [
-  "AI Interfaces",
-  "3D Web",
-  "Electron Apps",
-  "Real-Time Systems",
-  "Full-Stack Engineering",
-  "Product Development",
+function useTypedTerminal(lines, { charDelay = 26, pauseDelay = 480 } = {}) {
+  const segments = useMemo(() => {
+    const list = [];
+    lines.forEach((line, lineIndex) => {
+      list.push({ lineIndex, field: "prompt", text: line.prompt });
+      list.push({ lineIndex, field: "output", text: line.output });
+    });
+    return list;
+  }, [lines]);
+
+  const [revealed, setRevealed] = useState(() =>
+    lines.map(() => ({ prompt: "", output: "" })),
+  );
+  const [cursor, setCursor] = useState({ lineIndex: 0, field: "prompt" });
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReduced) {
+      setRevealed(lines.map((line) => ({ prompt: line.prompt, output: line.output })));
+      setIsDone(true);
+      return undefined;
+    }
+
+    let cancelled = false;
+    let timeoutId;
+    let segmentIndex = 0;
+    let charIndex = 0;
+
+    const tick = () => {
+      if (cancelled) return;
+
+      if (segmentIndex >= segments.length) {
+        setIsDone(true);
+        return;
+      }
+
+      const segment = segments[segmentIndex];
+      charIndex += 1;
+      const value = segment.text.slice(0, charIndex);
+
+      setRevealed((current) => {
+        const next = current.map((row) => ({ ...row }));
+        next[segment.lineIndex][segment.field] = value;
+        return next;
+      });
+      setCursor({ lineIndex: segment.lineIndex, field: segment.field });
+
+      if (charIndex < segment.text.length) {
+        timeoutId = window.setTimeout(tick, charDelay);
+      } else {
+        segmentIndex += 1;
+        charIndex = 0;
+        timeoutId = window.setTimeout(tick, pauseDelay);
+      }
+    };
+
+    timeoutId = window.setTimeout(tick, charDelay);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, [segments, charDelay, pauseDelay, lines]);
+
+  return { revealed, cursor, isDone };
+}
+
+const capabilityTiles = [
+  {
+    icon: FaRobot,
+    title: "AI-Integrated Interfaces",
+    description:
+      "LLM and speech-enabled experiences for desktop and web, from RAG pipelines to live voice interaction.",
+  },
+  {
+    icon: FaBolt,
+    title: "Real-Time Systems",
+    description:
+      "Multi-device orchestration and socket-based communication built to stay in sync under load.",
+  },
+  {
+    icon: FaCubes,
+    title: "3D & Interactive Web",
+    description:
+      "WebGL scenes, custom shaders, and particle-driven interfaces with Three.js and React Three Fiber.",
+  },
+  {
+    icon: FaLayerGroup,
+    title: "Cross-Platform Delivery",
+    description:
+      "Production software spanning web, Electron desktop, and mobile, shipped end to end.",
+  },
 ];
 
 const skillGroups = [
-  {
-    title: "Frontend",
-    items: ["React", "Next.js", "Svelte", "Vite", "Tailwind CSS", "HTML5"],
-  },
-  {
-    title: "Backend and APIs",
-    items: [
-      "Node.js",
-      "Express.js",
-      "REST APIs",
-      "Socket.IO",
-      "WebSocket",
-      "STOMP",
-    ],
-  },
-  {
-    title: "AI and ML",
-    items: [
-      "OpenAI",
-      "Gemini",
-      "Anthropic",
-      "RAG",
-      "MediaPipe",
-      "Whisper",
-      "Sherpa-ONNX",
-    ],
-  },
-  {
-    title: "3D and Graphics",
-    items: [
-      "Three.js",
-      "React Three Fiber",
-      "WebGL",
-      "Particle Systems",
-      "GSAP",
-    ],
-  },
-  {
-    title: "Desktop and Systems",
-    items: ["Electron", "IPC", "NSIS", "DMG Packaging", "Multi-window Systems"],
-  },
-  {
-    title: "Cloud and Tooling",
-    items: ["AWS", "Azure", "Aliyun OSS", "Docker", "Vercel", "Git"],
-  },
+  { key: "frontend", items: ["React", "Next.js", "Svelte", "Vite", "Tailwind CSS", "HTML5"] },
+  { key: "backend", items: ["Node.js", "Express.js", "REST APIs", "Socket.IO", "WebSocket", "STOMP"] },
+  { key: "aiAndMl", items: ["OpenAI", "Gemini", "Anthropic", "RAG", "MediaPipe", "Whisper", "Sherpa-ONNX"] },
+  { key: "graphics3d", items: ["Three.js", "React Three Fiber", "WebGL", "Particle Systems", "GSAP"] },
+  { key: "desktop", items: ["Electron", "IPC", "NSIS", "DMG Packaging", "Multi-window Systems"] },
+  { key: "cloud", items: ["AWS", "Azure", "Aliyun OSS", "Docker", "Vercel", "Git"] },
 ];
 
 const experience = [
   {
-    role: "Cross-Platform Web and Software Engineer",
+    hash: "a1e93f2",
+    role: "Cross-Platform Web & Software Engineer",
     company: "Sencity Corp.",
-    period: "May 2025 - Present",
+    period: "May 2025 to Present",
     points: [
-      "Architected and shipped enterprise dashboard systems that orchestrate 6+ simultaneous display outputs in real time for large-scale installations.",
-      "Built immersive 3D web experiences with Three.js and React Three Fiber, including particle-heavy scenes, custom shaders, HDR environments, and live interaction layers.",
-      "Developed LLM and speech-enabled desktop software using Electron, Whisper, Sherpa-ONNX, STOMP, and automated multi-window control flows.",
-      "Delivered production React, Next.js, and Tailwind platforms spanning data portals, model showrooms, and AI-powered interfaces connected to modern LLM APIs.",
+      "Architected real-time dashboard systems orchestrating 6+ simultaneous display outputs for large-scale installations.",
+      "Built immersive 3D experiences with Three.js and React Three Fiber, and shipped LLM and speech-enabled desktop software with Electron, Whisper, and Sherpa-ONNX.",
     ],
   },
   {
+    hash: "7c02d4b",
     role: "Frontend Developer Intern",
     company: "Sencity Corp.",
-    period: "Nov 2024 - Mar 2025",
+    period: "Nov 2024 to Mar 2025",
     points: [
-      "Contributed to front-end development and UniApp debugging across web and mobile products.",
-      "Handled deployments, SSL provisioning, and backend log monitoring to support stable production releases.",
-      "Built a standalone AI photo booth experience with a JavaScript front end and PHP-based API integrations.",
+      "Contributed to web and mobile front-end development, UniApp debugging, and production deployments.",
+      "Built a standalone AI photo booth experience end to end, from the JavaScript front end to a PHP-based API integration.",
     ],
   },
 ];
@@ -103,56 +162,38 @@ const experience = [
 const projects = [
   {
     title: "Real-Time Multi-Screen Event Platform",
+    lang: "TypeScript",
     summary:
       "A synchronized enterprise display platform with distributed state, playlist scheduling, and device orchestration across Linux, Windows, and macOS.",
-    tags: ["Electron", "Socket.IO", "STOMP", "TypeScript"],
+    tags: ["Electron", "Socket.IO", "STOMP"],
   },
   {
     title: "Interactive 3D Installation Experiences",
+    lang: "JavaScript",
     summary:
       "Browser-based 3D experiences combining custom particle systems, gesture recognition, and WebGL rendering for interactive installations.",
-    tags: ["Three.js", "React Three Fiber", "WebGL", "MediaPipe"],
+    tags: ["Three.js", "React Three Fiber", "MediaPipe"],
   },
   {
     title: "HALO Data Cleaning System",
+    lang: "Python",
     summary:
       "A human-and-LLM-in-the-loop data cleaning workflow that combines automated recommendations with user review for higher-quality datasets.",
     tags: ["Python", "LLMs", "Data Systems"],
   },
   {
     title: "Fluencio",
+    lang: "Java",
     summary:
       "A public speaking improvement product with app and web interfaces for pacing analysis, filler-word feedback, and structured practice.",
     tags: ["Java", "Mobile", "Speech Analysis"],
   },
 ];
 
-const education = [
-  {
-    degree: "Master of Science in Computer Science",
-    school: "Harbin Institute of Technology",
-    meta: "GPA: 90.6 / 100.0",
-    period: "Sep 2022 - Jan 2025",
-  },
-  {
-    degree: "Bachelor of Science in Software Engineering",
-    school: "Jinnah University for Women",
-    meta: "CGPA: 3.84 / 4.00",
-    period: "Jan 2018 - Dec 2021",
-  },
-];
-
-const awards = [
-  "Chinese Government Scholarship for a fully funded Master's degree",
-  "Merit-Based Full Semester Scholarship",
-  "Best Undergraduate Project Award",
-  "Women in Computing, Java Q&A Winner",
-];
-
 const navItems = [
   ["About", "#about"],
+  ["Work", "#projects"],
   ["Experience", "#experience"],
-  ["Projects", "#projects"],
   ["Skills", "#skills"],
   ["Contact", "#contact"],
 ];
@@ -174,6 +215,8 @@ function App() {
     message: "",
   });
   const [formMessage, setFormMessage] = useState("");
+  const { revealed: terminalLines, cursor: terminalCursor, isDone: terminalDone } =
+    useTypedTerminal(TERMINAL_LINES);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -316,7 +359,7 @@ function App() {
 
   useEffect(() => {
     const revealItems = document.querySelectorAll(
-      ".content-section, .content-card, .timeline-item, .project-card, .skill-card, .stack-card",
+      ".content-section, .prose-block, .commit-row, .repo-card, .capability-row",
     );
 
     const observer = new IntersectionObserver(
@@ -369,12 +412,10 @@ function App() {
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const pad = (n) => String(n).padStart(2, "0");
+
   return (
     <div className="portfolio-shell">
-      <div className="portfolio-particles" aria-hidden="true">
-        <SharedParticles id="portfolio-particles" />
-      </div>
-
       <header className="site-header">
         <a
           className="brand-mark"
@@ -385,7 +426,7 @@ function App() {
             scrollToTop();
           }}
         >
-          RS
+          rabiya<span className="brand-at">@</span>dev
         </a>
         <nav className="site-nav" aria-label="Primary">
           {navItems.map(([label, href]) => (
@@ -413,7 +454,7 @@ function App() {
           rel="noreferrer"
         >
           <FaDownload aria-hidden="true" />
-          Resume
+          resume.pdf
         </a>
 
         <button
@@ -451,7 +492,7 @@ function App() {
             onClick={() => setIsMenuOpen(false)}
           >
             <FaDownload aria-hidden="true" />
-            Resume
+            resume.pdf
           </a>
         </div>
       </div>
@@ -459,23 +500,21 @@ function App() {
       <main id="top">
         <section className="hero-section">
           <div className="hero-copy">
-            <p className="eyebrow">Full-Stack Software Engineer</p>
+            <p className="eyebrow">{"// software engineer"}</p>
+            <div className="status-pill">
+              <span className="status-dot" aria-hidden="true" />
+              Available for new roles
+            </div>
             <h1>Rabiya Salehjee</h1>
             <p className="hero-titleline">
-              Full-stack software engineer building AI-integrated applications, 3D web interfaces, and real-time systems.
+              I design and build considered software, from AI-integrated
+              products to real-time systems and 3D web interfaces.
             </p>
-            <div className="capability-strip" aria-label="Core capabilities">
-              <div className="capability-track">
-                {[...capabilities, ...capabilities].map((item, index) => (
-                  <span key={`${item}-${index}`}>{item}</span>
-                ))}
-              </div>
-            </div>
             <p className="hero-text">
-              I build production-ready software across web, desktop, and
-              interactive environments, with experience in LLM integration,
-              WebGL-based interfaces, real-time communication, and
-              cross-platform deployment.
+              My work spans web, desktop, and interactive environments,
+              including LLM integration, WebGL-based interfaces, real-time
+              communication, and shipping software that stays reliable in
+              production.
             </p>
 
             <div className="hero-actions">
@@ -483,8 +522,9 @@ function App() {
                 Start a conversation
                 <FaArrowRight aria-hidden="true" />
               </a>
-              <a className="secondary-button" href="#projects">
-                Explore selected work
+              <a className="text-link" href="#projects">
+                See selected work
+                <FaArrowRight aria-hidden="true" />
               </a>
             </div>
 
@@ -502,89 +542,108 @@ function App() {
             </ul>
           </div>
 
-          <aside className="hero-panel" aria-label="Professional overview">
-            <div className="hero-panel-card">
-              <span className="panel-label">Current focus</span>
-              <h2>
-                AI-integrated software, real-time systems, and production web interfaces
-              </h2>
+          <div className="terminal-window" aria-hidden="true">
+            <div className="terminal-bar">
+              <span className="terminal-dot" />
+              <span className="terminal-dot" />
+              <span className="terminal-dot" />
+              <span className="terminal-title">zsh · rabiya@portfolio</span>
+            </div>
+            <div className="terminal-body">
+              {terminalLines.map((line, lineIndex) => (
+                <div className="terminal-line" key={lineIndex}>
+                  <p className="terminal-prompt">
+                    <span className="terminal-symbol">➜</span>
+                    <span className="terminal-path">~</span>
+                    <span className="terminal-command">
+                      {line.prompt}
+                      {!terminalDone &&
+                      terminalCursor.lineIndex === lineIndex &&
+                      terminalCursor.field === "prompt" ? (
+                        <span className="cursor-blink" />
+                      ) : null}
+                    </span>
+                  </p>
+                  {line.output ? (
+                    <p className="terminal-output">
+                      {line.output}
+                      {!terminalDone &&
+                      terminalCursor.lineIndex === lineIndex &&
+                      terminalCursor.field === "output" ? (
+                        <span className="cursor-blink" />
+                      ) : null}
+                    </p>
+                  ) : null}
+                </div>
+              ))}
+              {terminalDone ? (
+                <p className="terminal-prompt terminal-prompt--idle">
+                  <span className="terminal-symbol">➜</span>
+                  <span className="terminal-path">~</span>
+                  <span className="cursor-blink" />
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </section>
+
+        <section id="about" className="content-section">
+          <div className="section-heading">
+            <p className="eyebrow">{"// about"}</p>
+            <h2>I care about software that feels intentional, not just functional</h2>
+          </div>
+          <div className="about-layout">
+            <div className="prose-block">
               <p>
-                My work focuses on reliable application architecture,
-                responsive interfaces, and practical integrations that move
-                products from concept to production.
+                I’m a software engineer with a Master’s in Computer Science and
+                hands-on experience delivering production applications across
+                the full stack. Recent work spans enterprise dashboards,
+                interactive 3D web interfaces, and desktop applications with
+                LLM and speech-recognition capabilities.
+              </p>
+              <p>
+                I like owning a problem end to end, shaping the architecture,
+                writing the interface, and making sure the whole thing holds
+                up once real people are using it.
               </p>
             </div>
-
-            <div className="hero-stats">
-              <article>
-                <strong>1+ year</strong>
-                <span>industry experience</span>
-              </article>
-              <article>
-                <strong>Interactive systems</strong>
-                <span>AI, WebGL, and real-time interfaces</span>
-              </article>
-              <article>
-                <strong>Cross-platform</strong>
-                <span>web, desktop, mobile</span>
-              </article>
-            </div>
-          </aside>
-        </section>
-
-        <section id="about" className="content-section two-column-section">
-          <div className="section-heading">
-            <p className="eyebrow">About</p>
-            <h2>Engineering reliable software with clear product purpose</h2>
-          </div>
-          <div className="content-card prose-card">
-            <p>
-              I’m a software engineer with a Master’s in Computer Science and
-              hands-on experience delivering production applications across the
-              full stack. My recent work includes enterprise dashboards,
-              interactive 3D web interfaces, and desktop applications with LLM
-              and speech-recognition capabilities.
-            </p>
-            <p>
-              I work well on projects that require ownership across architecture,
-              implementation, and user-facing quality: defining data and event
-              flows, building maintainable interfaces, and preparing systems for
-              stable production use.
-            </p>
-          </div>
-          <div className="content-card highlights-card">
-            <div className="mini-heading">
-              <FaRobot aria-hidden="true" />
-              <span>Core strengths</span>
-            </div>
-            <ul className="highlight-list">
-              {highlights.map((item) => (
-                <li key={item}>{item}</li>
+            <div className="capability-list">
+              {capabilityTiles.map((tile, index) => (
+                <article key={tile.title} className="capability-row">
+                  <span className="capability-index">{pad(index + 1)}</span>
+                  <tile.icon aria-hidden="true" />
+                  <div>
+                    <h3>{tile.title}</h3>
+                    <p>{tile.description}</p>
+                  </div>
+                </article>
               ))}
-            </ul>
+            </div>
           </div>
         </section>
 
-        <section id="experience" className="content-section">
+        <section id="projects" className="content-section">
           <div className="section-heading">
-            <p className="eyebrow">Experience</p>
-            <h2>Recent roles and production work</h2>
+            <p className="eyebrow">{"// selected-work"}</p>
+            <h2>A few things I’ve built and shipped</h2>
           </div>
-          <div className="timeline">
-            {experience.map((item) => (
-              <article
-                key={`${item.role}-${item.period}`}
-                className="timeline-item"
-              >
-                <div className="timeline-meta">
-                  <p>{item.period}</p>
-                </div>
-                <div className="timeline-content">
-                  <h3>{item.role}</h3>
-                  <p className="timeline-company">{item.company}</p>
-                  <ul>
-                    {item.points.map((point) => (
-                      <li key={point}>{point}</li>
+          <div className="repo-grid">
+            {projects.map((project) => (
+              <article key={project.title} className="repo-card">
+                <p className="repo-path">~/projects/{slugify(project.title)}</p>
+                <h3>{project.title}</h3>
+                <p className="repo-summary">{project.summary}</p>
+                <div className="repo-meta">
+                  <span className="repo-lang">
+                    <span className="repo-dot" aria-hidden="true" />
+                    {project.lang}
+                  </span>
+                  <ul
+                    className="tag-list"
+                    aria-label={`${project.title} technologies`}
+                  >
+                    {project.tags.map((tag) => (
+                      <li key={tag}>{tag}</li>
                     ))}
                   </ul>
                 </div>
@@ -593,102 +652,94 @@ function App() {
           </div>
         </section>
 
-        <section id="projects" className="content-section">
+        <section id="experience" className="content-section">
           <div className="section-heading">
-            <p className="eyebrow">Selected Work</p>
-            <h2>Selected engineering work and applied product systems</h2>
+            <p className="eyebrow">{"// experience"}</p>
+            <h2>Where I’ve put this to work</h2>
           </div>
-          <div className="project-grid">
-            {projects.map((project) => (
-              <article key={project.title} className="project-card">
-                <h3>{project.title}</h3>
-                <p>{project.summary}</p>
-                <ul
-                  className="tag-list"
-                  aria-label={`${project.title} technologies`}
+          <div className="commit-log">
+            {experience.map((item) => {
+              const isCurrent = item.period.endsWith("Present");
+
+              return (
+                <article
+                  key={`${item.role}-${item.period}`}
+                  className={`commit-row ${isCurrent ? "commit-row--current" : ""}`}
                 >
-                  {project.tags.map((tag) => (
-                    <li key={tag}>{tag}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
+                  <div className="commit-meta">
+                    <span className="commit-hash">{item.hash}</span>
+                    <span className="commit-date">{item.period}</span>
+                    {isCurrent ? (
+                      <span className="commit-current">current</span>
+                    ) : null}
+                  </div>
+                  <h3>
+                    {item.role}
+                    <span className="commit-company"> @ {item.company}</span>
+                  </h3>
+                  <ul className="diff-list">
+                    {item.points.map((point) => (
+                      <li key={point}>
+                        <span className="diff-plus" aria-hidden="true">
+                          +
+                        </span>
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              );
+            })}
           </div>
         </section>
 
         <section id="skills" className="content-section">
           <div className="section-heading">
-            <p className="eyebrow">Skills</p>
-            <h2>Technical capabilities across application layers</h2>
+            <p className="eyebrow">{"// skills"}</p>
+            <h2>Tools I reach for</h2>
           </div>
-          <div className="skills-grid">
-            {skillGroups.map((group) => (
-              <article key={group.title} className="skill-card">
-                <h3>{group.title}</h3>
-                <ul>
-                  {group.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="content-section info-grid-section">
-          <div>
-            <div className="section-heading">
-              <p className="eyebrow">Education</p>
-              <h2>Academic foundation</h2>
+          <div className="code-block">
+            <div className="code-block-head">
+              <span className="terminal-dot" />
+              <span className="code-filename">stack.js</span>
             </div>
-            <div className="stack-list">
-              {education.map((item) => (
-                <article key={item.degree} className="stack-card">
-                  <div className="stack-row">
-                    <h3>{item.degree}</h3>
-                    <span>{item.period}</span>
-                  </div>
-                  <p>{item.school}</p>
-                  <small>{item.meta}</small>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <div className="section-heading">
-              <p className="eyebrow">Recognition</p>
-              <h2>Awards and languages</h2>
-            </div>
-            <div className="stack-list">
-              <article className="stack-card">
-                <h3>Awards and scholarships</h3>
-                <ul className="simple-list">
-                  {awards.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </article>
-              <article className="stack-card">
-                <h3>Languages</h3>
-                <ul className="simple-list">
-                  <li>English: Fluent</li>
-                  <li>Urdu / Hindi: Native</li>
-                  <li>Chinese (Mandarin): Basic</li>
-                </ul>
-              </article>
-            </div>
+            <pre className="code-block-body">
+              <code>
+                <span className="code-line">
+                  <span className="code-ln">1</span>
+                  <span className="code-kw">const</span> stack = {"{"}
+                </span>
+                {skillGroups.map((group, index) => (
+                  <span className="code-line" key={group.key}>
+                    <span className="code-ln">{index + 2}</span>
+                    <span className="code-indent"> </span>
+                    <span className="code-key">{group.key}</span>:{" "}[
+                    {group.items.map((item, itemIndex) => (
+                      <span key={item}>
+                        <span className="code-str">&quot;{item}&quot;</span>
+                        {itemIndex < group.items.length - 1 ? ", " : ""}
+                      </span>
+                    ))}
+                    ],
+                  </span>
+                ))}
+                <span className="code-line">
+                  <span className="code-ln">{skillGroups.length + 2}</span>
+                  {"}"};
+                </span>
+              </code>
+            </pre>
           </div>
         </section>
 
         <section id="contact" className="content-section contact-section">
           <div className="section-heading">
-            <p className="eyebrow">Contact</p>
+            <p className="eyebrow">{"// contact"}</p>
             <h2>Available for software engineering opportunities</h2>
           </div>
 
           <div className="contact-layout">
-            <div className="content-card contact-copy">
+            <div className="contact-copy">
               <p>
                 I’m open to software engineering roles and projects involving
                 full-stack development, AI integration, interactive interfaces,
@@ -720,6 +771,7 @@ function App() {
 
             <form className="contact-form" onSubmit={handleSubmit}>
               <label htmlFor="name">
+                <span className="field-prompt" aria-hidden="true">$</span>
                 Name <span aria-hidden="true">*</span>
               </label>
               <input
@@ -733,6 +785,7 @@ function App() {
               />
 
               <label htmlFor="email">
+                <span className="field-prompt" aria-hidden="true">$</span>
                 Email <span aria-hidden="true">*</span>
               </label>
               <input
@@ -745,7 +798,10 @@ function App() {
                 required
               />
 
-              <label htmlFor="company">Company or project</label>
+              <label htmlFor="company">
+                <span className="field-prompt" aria-hidden="true">$</span>
+                Company or project
+              </label>
               <input
                 id="company"
                 name="company"
@@ -756,6 +812,7 @@ function App() {
               />
 
               <label htmlFor="message">
+                <span className="field-prompt" aria-hidden="true">$</span>
                 Message <span aria-hidden="true">*</span>
               </label>
               <textarea
@@ -774,11 +831,13 @@ function App() {
                 className="primary-button form-button"
                 disabled={isSending || !isFormReady}
               >
-                {isSending ? "Sending..." : "Send message"}
+                <span className="field-prompt" aria-hidden="true">$</span>
+                {isSending ? "sending message..." : "send message"}
               </button>
 
               {formMessage ? (
                 <p className="form-status" role="status">
+                  <span className="field-prompt" aria-hidden="true">&gt;</span>
                   {formMessage}
                 </p>
               ) : null}
@@ -786,6 +845,19 @@ function App() {
           </div>
         </section>
       </main>
+
+      <footer className="site-footer">
+        <p>{"// © "}{new Date().getFullYear()}{" Rabiya Salehjee, built with React"}</p>
+        <div className="footer-links">
+          <a href="mailto:rabiya.salehjee@gmail.com">Email</a>
+          <a href="https://www.linkedin.com/in/rabiyasalehjee99/" target="_blank" rel="noreferrer">
+            LinkedIn
+          </a>
+          <a href="https://github.com/rabiyasalehjee" target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+        </div>
+      </footer>
 
       <div className="scroll-controls" aria-label="Page scroll control">
         <button

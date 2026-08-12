@@ -17,7 +17,7 @@
 
   html {
     min-height: 100%;
-    background: #000000;
+    background: #fbfaf8;
     overscroll-behavior: none;
     scroll-behavior: smooth;
   }
@@ -30,8 +30,8 @@
     min-height: 100%;
     margin: 0;
     font-family: "Futura Local", Futura, "Trebuchet MS", Arial, sans-serif;
-    background: #000000;
-    color: #f2f2f2;
+    background: #fbfaf8;
+    color: #141312;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
@@ -39,7 +39,7 @@
 
   #root {
     min-height: 100vh;
-    background: #000000;
+    background: #fbfaf8;
   }
 
   a,
@@ -55,7 +55,7 @@
   }
 
   ::selection {
-    background: rgba(255, 255, 255, 0.24);
-    color: #ffffff;
+    background: rgba(255, 90, 31, 0.22);
+    color: #141312;
   }
 }
