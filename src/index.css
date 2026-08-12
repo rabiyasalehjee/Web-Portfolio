@@ -17,7 +17,7 @@
 
   html {
     min-height: 100%;
-    background: #fbfaf8;
+    background: #ffffff;
     overscroll-behavior: none;
     scroll-behavior: smooth;
   }
@@ -30,7 +30,7 @@
     min-height: 100%;
     margin: 0;
     font-family: "Futura Local", Futura, "Trebuchet MS", Arial, sans-serif;
-    background: #fbfaf8;
+    background: #ffffff;
     color: #141312;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -39,7 +39,7 @@
 
   #root {
     min-height: 100vh;
-    background: #fbfaf8;
+    background: #ffffff;
   }
 
   a,

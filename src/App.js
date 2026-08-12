@@ -501,10 +501,6 @@ function App() {
         <section className="hero-section">
           <div className="hero-copy">
             <p className="eyebrow">{"// software engineer"}</p>
-            <div className="status-pill">
-              <span className="status-dot" aria-hidden="true" />
-              Available for new roles
-            </div>
             <h1>Rabiya Salehjee</h1>
             <p className="hero-titleline">
               I design and build considered software, from AI-integrated
